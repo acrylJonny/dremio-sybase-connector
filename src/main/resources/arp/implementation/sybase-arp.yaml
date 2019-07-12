@@ -16,8 +16,8 @@
 
 metadata:
   # Manually Configured Metadata Section.
-  name: SALESFORCEARP
-  apiname: salesforce
+  name: SYBASEARP
+  apiname: sybase
   spec_version: '1'
 
 syntax:
@@ -26,8 +26,8 @@ syntax:
   identifier_length_limit: 128
   allows_boolean_literal: true
   map_boolean_literal_to_bit: false
-  supports_catalogs: false
-  supports_schemas: false
+  supports_catalogs: true
+  supports_schemas: true
 
 data_types:
   mappings:
@@ -124,6 +124,16 @@ data_types:
     dremio:
       name: "varchar"
     required_cast_arguments: "none"
+  - source:
+      name: "SYSNAME"
+    dremio:
+      name: "varchar"
+    required_cast_arguments: "none"
+  - source:
+      name: "LONGSYSNAME"
+    dremio:
+      name: "varchar"
+    required_cast_arguments: "none"
 
 relational_algebra:
   aggregation:
@@ -197,13 +207,11 @@ relational_algebra:
       default_nulls_ordering: high
     fetch_offset:
       offset_fetch:
-        enable: true
-        format: 'LIMIT {1} OFFSET {0}'
+        enable: false
       offset_only:
         enable: false
       fetch_only:
-        enable: true
-        format: 'LIMIT {0}'
+        enable: false
   union:
     enable: false
   union_all:

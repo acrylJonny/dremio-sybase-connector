@@ -64,12 +64,6 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
   @DisplayMetadata(label = "Password")
   public String password;
 
-  @Tag(5)
-  @DisplayMetadata(label = "Record fetch size")
-  @NotMetadataImpacting
-  public int fetchSize = 200;
-
-
 
   @VisibleForTesting
   public String toJdbcConnectionString() {
@@ -86,7 +80,6 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
   public Config toPluginConfig(SabotContext context) {
     return JdbcStoragePlugin.Config.newBuilder()
         .withDialect(getDialect())
-        .withFetchSize(fetchSize)
         .withDatasourceFactory(this::newDataSource)
         .clearHiddenSchemas()
         //.addHiddenSchema("SYSTEM")
