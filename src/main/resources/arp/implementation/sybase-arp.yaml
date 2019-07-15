@@ -188,6 +188,7 @@ relational_algebra:
     enable: true
     cross:
       enable: true
+      rewrite: "{0}, {1}"
     inner:
       enable: true
       inequality: true
@@ -195,8 +196,8 @@ relational_algebra:
       enable: true
       inequality: true
     right:
-      enable: false
-      inequality: false
+      enable: true
+      inequality: true
     full:
       enable: false
       inequality: false
@@ -213,9 +214,9 @@ relational_algebra:
       fetch_only:
         enable: false
   union:
-    enable: false
+    enable: true
   union_all:
-    enable: false
+    enable: true
   values:
     enable: false
     method: values
