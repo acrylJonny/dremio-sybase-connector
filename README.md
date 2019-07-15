@@ -1,12 +1,12 @@
 # Dremio Sybase ARP Connector
 
-The Sybase connector allows Dremio to connect to and query data in Sybase ASE. Note that it does require a third-party JDBC driver that is not free, but does allow a free trial.
+The Sybase connector allows Dremio to connect to and query data in Sybase ASE and IQ.
 
 ## Building and Installation
 
 1. In root directory with the pom.xml file run `mvn clean install`
 2. Take the resulting .jar file in the target folder and put it in the $DREMIO_HOME/jars folder in Dremio
-3. Download the Sybase JDBC driver from DBeaver (https://dbeaver.io/files/jdbc/drivers/sybase/jconnect/jconn4.jar) and put in in the $DREMIO_HOME/jars/3rdparty folder. Note you will need to sign up for a trial usage of the driver or pay for it if needing to use long term.
+3. Download the Sybase JDBC driver from DBeaver (https://dbeaver.io/files/jdbc/drivers/sybase/jconnect/jconn4.jar) and put in in the $DREMIO_HOME/jars/3rdparty folder.
 4. Restart Dremio
 
 
