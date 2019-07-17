@@ -36,7 +36,7 @@ import io.protostuff.Tag;
 /**
  * Configuration for Sybase sources.
  */
-@SourceType(value = "SYBASEEARP", label = "Sybase")
+@SourceType(value = "SYBASEARP", label = "Sybase")
 public class SybaseConf extends AbstractArpConf<SybaseConf> {
   private static final String ARP_FILENAME = "arp/implementation/sybase-arp.yaml";
   private static final ArpDialect ARP_DIALECT =
