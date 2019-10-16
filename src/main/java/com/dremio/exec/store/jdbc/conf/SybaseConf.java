@@ -13,25 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dremio.exec.store.jdbc.conf;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+ package com.dremio.exec.store.jdbc.conf;
 
-import org.hibernate.validator.constraints.NotBlank;
+ import static com.google.common.base.Preconditions.checkNotNull;
+ import static java.lang.String.format;
 
-import com.dremio.exec.catalog.conf.DisplayMetadata;
-import com.dremio.exec.catalog.conf.NotMetadataImpacting;
-import com.dremio.exec.catalog.conf.Secret;
-import com.dremio.exec.catalog.conf.SourceType;
-import com.dremio.exec.server.SabotContext;
-import com.dremio.exec.store.jdbc.CloseableDataSource;
-import com.dremio.exec.store.jdbc.DataSources;
-import com.dremio.exec.store.jdbc.JdbcStoragePlugin;
-import com.dremio.exec.store.jdbc.JdbcStoragePlugin.Config;
-import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
-import com.google.common.annotations.VisibleForTesting;
+ import java.io.IOException;
+ import java.net.URI;
+ import java.sql.SQLException;
+ import java.util.Properties;
 
-import io.protostuff.Tag;
+ import javax.validation.constraints.Max;
+ import javax.validation.constraints.Min;
+ import javax.validation.constraints.NotBlank;
+
+ import com.dremio.exec.catalog.conf.DisplayMetadata;
+ import com.dremio.exec.catalog.conf.NotMetadataImpacting;
+ import com.dremio.exec.catalog.conf.Secret;
+ import com.dremio.exec.catalog.conf.SourceType;
+ import com.dremio.exec.server.SabotContext;
+ import com.dremio.exec.store.jdbc.CloseableDataSource;
+ import com.dremio.exec.store.jdbc.DataSources;
+ import com.dremio.exec.store.jdbc.JdbcStoragePlugin;
+ import com.dremio.exec.store.jdbc.JdbcStoragePlugin.Config;
+ import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
+ import com.dremio.security.CredentialsService;
+ import com.dremio.security.PasswordCredentials;
+ import com.google.common.annotations.VisibleForTesting;
+ import com.google.common.base.Strings;
+
+ import io.protostuff.Tag;
+
 
 /**
  * Configuration for Sybase sources.
@@ -45,51 +58,84 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
 
   @NotBlank
   @Tag(1)
-  @DisplayMetadata(label = "Host")
-  public String host;
+  @DisplayMetadata(label = "Hostname")
+  public String hostname;
 
   @NotBlank
   @Tag(2)
+  @Min(1)
+  @Max(65535)
   @DisplayMetadata(label = "Port")
-  public String port;
+  public String port = "5000";
+
+  @Tag(3)
+  @DisplayMetadata(label = "Database (optional)")
+  public String database;
 
   @NotBlank
-  @Tag(3)
+  @Tag(4)
   @DisplayMetadata(label = "Username")
   public String username;
 
   @NotBlank
-  @Tag(4)
+  @Tag(5)
   @Secret
   @DisplayMetadata(label = "Password")
   public String password;
 
+  @Tag(6)
+  @DisplayMetadata(label = "Encrypt connection")
+  @NotMetadataImpacting
+  public boolean useSsl = false;
 
-  @VisibleForTesting
-  public String toJdbcConnectionString() {
-    final String host = checkNotNull(this.host, "Missing host.");
-    final String port = checkNotNull(this.port, "Missing port.");
-    final String username = checkNotNull(this.username, "Missing username.");
-    final String password = checkNotNull(this.password, "Missing password.");
+  @Tag(7)
+  @DisplayMetadata(label = "Record fetch size")
+  @NotMetadataImpacting
+  public int fetchSize = 500;
 
-    return String.format("jdbc:sybase:Tds:%s:%s", host, port);
+
+  public SybaseConf() {
   }
 
   @Override
   @VisibleForTesting
-  public Config toPluginConfig(SabotContext context) {
-    return JdbcStoragePlugin.Config.newBuilder()
+  protected Config toPluginConfig(SabotContext context) {
+         return JdbcStoragePlugin.Config.newBuilder()
         .withDialect(getDialect())
         .withDatasourceFactory(this::newDataSource)
-        .clearHiddenSchemas()
-        //.addHiddenSchema("SYSTEM")
+        .withShowOnlyConnDatabase(false)
+        .withFetchSize(fetchSize)
         .build();
   }
 
-  private CloseableDataSource newDataSource() {
-    return DataSources.newGenericConnectionPoolDataSource(DRIVER,
-      toJdbcConnectionString(), username, password, null, DataSources.CommitMode.DRIVER_SPECIFIED_COMMIT_MODE);
+
+    private CloseableDataSource newDataSource() {
+    final Properties properties = new Properties();
+
+    if (useSsl) {
+      properties.setProperty("SYBSOCKET_FACTORY", "DEFAULT");
+    }
+
+  return DataSources.newGenericConnectionPoolDataSource(
+    DRIVER,
+    toJdbcConnectionString(),
+    username,
+    password,
+    properties,
+    DataSources.CommitMode.DRIVER_SPECIFIED_COMMIT_MODE);
+}
+
+private String toJdbcConnectionString() {
+  final String hostname = checkNotNull(this.hostname, "missing hostname");
+  final String portAsString = checkNotNull(this.port, "missing port");
+  final int port = Integer.parseInt(portAsString);
+
+  if (!Strings.isNullOrEmpty(this.database)) {
+    return String.format("jdbc:sybase:Tds:%s:%s/%s", hostname, port, database);
+  } else {
+    return String.format("jdbc:sybase:Tds:%s:%s", hostname, port);
   }
+}
 
   @Override
   public ArpDialect getDialect() {
