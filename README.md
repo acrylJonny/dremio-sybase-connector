@@ -1,6 +1,6 @@
 # Dremio Sybase ARP Connector
 
-The Sybase connector allows Dremio to connect to and query data in Sybase ASE and IQ.
+The Sybase connector allows Dremio to connect to and query data in Sybase ASE.
 
 ## Building and Installation
 
