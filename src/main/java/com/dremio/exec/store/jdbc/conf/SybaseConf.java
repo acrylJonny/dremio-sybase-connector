@@ -17,11 +17,6 @@
  package com.dremio.exec.store.jdbc.conf;
 
  import static com.google.common.base.Preconditions.checkNotNull;
- import static java.lang.String.format;
-
- import java.io.IOException;
- import java.net.URI;
- import java.sql.SQLException;
  import java.util.Properties;
 
  import javax.validation.constraints.Max;
@@ -38,8 +33,7 @@
  import com.dremio.exec.store.jdbc.JdbcStoragePlugin;
  import com.dremio.exec.store.jdbc.JdbcStoragePlugin.Config;
  import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
- import com.dremio.security.CredentialsService;
- import com.dremio.security.PasswordCredentials;
+ import com.dremio.exec.store.jdbc.dialect.SybaseDialect;
  import com.google.common.annotations.VisibleForTesting;
  import com.google.common.base.Strings;
 
@@ -53,7 +47,7 @@
 public class SybaseConf extends AbstractArpConf<SybaseConf> {
   private static final String ARP_FILENAME = "arp/implementation/sybase-arp.yaml";
   private static final ArpDialect ARP_DIALECT =
-      AbstractArpConf.loadArpFile(ARP_FILENAME, (ArpDialect::new));
+      AbstractArpConf.loadArpFile(ARP_FILENAME, (SybaseDialect::new));
   private static final String DRIVER = "com.sybase.jdbc4.jdbc.SybDriver";
 
   @NotBlank
@@ -85,7 +79,6 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
 
   @Tag(6)
   @DisplayMetadata(label = "Encrypt connection")
-  @NotMetadataImpacting
   public boolean useSsl = false;
 
   @Tag(7)
@@ -131,7 +124,7 @@ private String toJdbcConnectionString() {
   final int port = Integer.parseInt(portAsString);
 
   if (!Strings.isNullOrEmpty(this.database)) {
-    return String.format("jdbc:sybase:Tds:%s:%s/%s", hostname, port, database);
+    return String.format("jdbc:sybase:Tds:%s:%s/%s", hostname, port, this.database);
   } else {
     return String.format("jdbc:sybase:Tds:%s:%s", hostname, port);
   }

@@ -246,21 +246,21 @@ relational_algebra:
   project:
     enable: true
   join:
-    enable: false
+    enable: true
     cross:
       enable: false
     inner:
-      enable: false
-      inequality: false
+      enable: true
+      inequality: true
     left:
-      enable: false
-      inequality: false
+      enable: true
+      inequality: true
     right:
-      enable: false
-      inequality: false
+      enable: true
+      inequality: true
     full:
-      enable: false
-      inequality: false
+      enable: true
+      inequality: true
   sort:
     enable: true
     order_by:
@@ -272,7 +272,7 @@ relational_algebra:
       offset_only:
         enable: false
       fetch_only:
-        enable: false
+        enable: true
   union:
     enable: true
   union_all:
