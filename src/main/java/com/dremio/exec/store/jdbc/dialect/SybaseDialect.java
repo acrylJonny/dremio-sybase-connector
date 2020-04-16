@@ -14,6 +14,7 @@ import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlWriter;
 import org.apache.calcite.sql.parser.SqlParserPos;
 import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
+import com.dremio.common.expression.CompleteType;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
@@ -46,6 +47,15 @@ public class SybaseDialect extends ArpDialect {
   @Override
   public boolean hasImplicitTableAlias() {
     return false;
+  }
+
+  @Override
+  public boolean supportsLiteral(CompleteType type) {
+    if (CompleteType.BIT.equals(type)) {
+      return false;
+    }
+
+    return super.supportsLiteral(type);
   }
 
   @Override

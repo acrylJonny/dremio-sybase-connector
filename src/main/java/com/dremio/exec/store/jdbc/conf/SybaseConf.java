@@ -105,6 +105,8 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
     private CloseableDataSource newDataSource() {
     final Properties properties = new Properties();
 
+    properties.setProperty("JCONNECT_VERSION", "7");
+
     if (useSsl) {
       properties.setProperty("SYBSOCKET_FACTORY", "DEFAULT");
     }

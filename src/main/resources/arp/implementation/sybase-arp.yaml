@@ -24,7 +24,7 @@ syntax:
   # Manually Configured Syntax Section.
   identifier_quote: '"'
   identifier_length_limit: 128
-  allows_boolean_literal: true
+  allows_boolean_literal: false
   map_boolean_literal_to_bit: false
   supports_catalogs: true
   supports_schemas: true
@@ -33,132 +33,120 @@ data_types:
   mappings:
   # Manually Configured Data Types Mappings Section.
   - source:
-      name: "BIT"
+      name: "INTEGER"
     dremio:
-      name: "boolean"
-    required_cast_arguments: "none"
+      name: "integer"
+  - source:
+      name: "TIMESTAMP"
+    dremio:
+      name: "timestamp"
   - source:
       name: "INT"
     dremio:
       name: "integer"
-    required_cast_arguments: "none"
-  - source:
-      name: "INTEGER"
-    dremio:
-      name: "integer"
-    required_cast_arguments: "none"
   - source:
       name: "SMALLINT"
     dremio:
       name: "integer"
-    required_cast_arguments: "none"
   - source:
       name: "TINYINT"
     dremio:
       name: "integer"
-    required_cast_arguments: "none"
   - source:
       name: "BIGINT"
     dremio:
       name: "bigint"
-    required_cast_arguments: "none"
   - source:
       name: "DECIMAL"
     dremio:
       name: "decimal"
-    required_cast_arguments: "none"
   - source:
       name: "REAL"
     dremio:
       name: "double"
-      required_cast_arguments: "none"
   - source:
       name: "NUMERIC"
     dremio:
       name: "integer"
-    required_cast_arguments: "none"
   - source:
       name: "MONEY"
     dremio:
       name: "double"
-    required_cast_arguments: "none"
   - source:
       name: "SMALLMONEY"
     dremio:
       name: "double"
-    required_cast_arguments: "none"
   - source:
       name: "DATETIME"
       max_scale: 8
     dremio:
       name: "timestamp"
-    required_cast_arguments: "none"
   - source:
       name: "SMALLDATETIME"
       max_scale: 4
     dremio:
       name: "timestamp"
-    required_cast_arguments: "none"
   - source:
       name: "DATE"
     dremio:
-      name: "date"
-    required_cast_arguments: "none"
+      name: "timestamp"
   - source:
       name: "TIME"
     dremio:
       name: "time"
-    required_cast_arguments: "none"
-  - source:
-      name: "TEXT"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "UNITEXT"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "BINARY"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "VARBINARY"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "IMAGE"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "CHAR"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
-  - source:
-      name: "NCHAR"
-    dremio:
-      name: "varchar"
-    required_cast_arguments: "none"
   - source:
       name: "VARCHAR"
     dremio:
       name: "varchar"
-    required_cast_arguments: "none"
+  - source:
+      name: "TEXT"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "UNITEXT"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "BINARY"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "VARBINARY"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "IMAGE"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "CHAR"
+    dremio:
+      name: "varchar"
+  - source:
+      name: "NCHAR"
+    dremio:
+      name: "varchar"
   - source:
       name: "NVARCHAR"
     dremio:
       name: "varchar"
-    required_cast_arguments: "none"
   - source:
       name: "UNIVARCHAR"
     dremio:
       name: "varchar"
-    required_cast_arguments: "none"
+  - source:
+      name: "BIT"
+    dremio:
+      name: "boolean"
+    default_cast_spec: true
+  - source:
+      name: "BIGDATETIME"
+    dremio:
+      name: "timestamp"
+  - source:
+      name: "BIGTIME"
+    dremio:
+      name: "time"
 
 relational_algebra:
   aggregation:
@@ -288,7 +276,7 @@ expressions:
     correlated: true
     scalar: true
     in_clause: true
-    exists_clase: true
+    exists_clause: true
   supports_case: true
   supports_over: true
   datetime_formats:
