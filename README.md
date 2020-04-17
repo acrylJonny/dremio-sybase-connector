@@ -9,6 +9,7 @@ The Sybase connector allows Dremio to connect to and query data in Sybase ASE.
 3. Download the Sybase JDBC driver from DBeaver (https://dbeaver.io/files/jdbc/drivers/sybase/jconnect/jconn4.jar) and put in in the $DREMIO_HOME/jars/3rdparty folder.
 4. Restart Dremio
 
+**WARNING - When upgrading from v4.1 to v4.2 of the connector you will need to recreate the datasource as this new formatting is not back compatible with previously created connections**
 
 # ARP Overview
 
