@@ -40,6 +40,7 @@ data_types:
       name: "TIMESTAMP"
     dremio:
       name: "timestamp"
+    default_cast_spec: true
   - source:
       name: "INT"
     dremio:
@@ -89,7 +90,7 @@ data_types:
   - source:
       name: "DATE"
     dremio:
-      name: "timestamp"
+      name: "date"
   - source:
       name: "TIME"
     dremio:
@@ -341,6 +342,18 @@ expressions:
         - "varchar"
         return: "integer"
         rewrite: "cast(cast({0} as float) as int)"
+      - args:
+        - "varchar"
+        return: "date"
+        rewrite: "cast({0} as date)"
+      - args:
+        - "varchar"
+        return: "timestamp"
+        rewrite: "cast({0} as timestamp)"
+      - args:
+        - "varchar"
+        return: "time"
+        rewrite: "cast({0} as time)"
     - names:
       - "trim"
       signatures:
@@ -2630,6 +2643,7 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) = {1}"
       - args:
         - "varchar"
         - "time"
@@ -2642,14 +2656,17 @@ expressions:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} = cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) = {1}"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} = cast({1} as time)"
     - names:
       - ">"
       signatures:
@@ -2657,26 +2674,32 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) > {1}"
       - args:
         - "varchar"
         - "time"
         return: "boolean"
+        rewrite: "cast({0} as time) > {1}"
       - args:
         - "varchar"
         - "timestamp"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) > {1}"
       - args:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} > cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} > cast({1} as timestamp)"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} > cast({1} as time)"
     - names:
       - ">="
       signatures:
@@ -2684,26 +2707,32 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) >= {1}"
       - args:
         - "varchar"
         - "time"
         return: "boolean"
+        rewrite: "cast({0} as time) >= {1}"
       - args:
         - "varchar"
         - "timestamp"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) >= {1}"
       - args:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} >= cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} >= cast({1} as timestamp)"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} >= cast({1} as time)"
     - names:
       - "<"
       signatures:
@@ -2711,26 +2740,32 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) < {1}"
       - args:
         - "varchar"
         - "time"
         return: "boolean"
+        rewrite: "cast({0} as time) < {1}"
       - args:
         - "varchar"
         - "timestamp"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) < {1}"
       - args:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} < cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} < cast({1} as timestamp)"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} < cast({1} as time)"
     - names:
       - "<="
       signatures:
@@ -2738,26 +2773,32 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) <= {1}"
       - args:
         - "varchar"
         - "time"
         return: "boolean"
+        rewrite: "cast({0} as time) <= {1}"
       - args:
         - "varchar"
         - "timestamp"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) <= {1}"
       - args:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} <= cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} <= cast({1} as timestamp)"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} <= cast({1} as time)"
     - names:
       - "!="
       - "<>"
@@ -2766,26 +2807,32 @@ expressions:
         - "varchar"
         - "date"
         return: "boolean"
+        rewrite: "cast({0} as date) != {1}"
       - args:
         - "varchar"
         - "time"
         return: "boolean"
+        rewrite: "cast({0} as time) != {1}"
       - args:
         - "varchar"
         - "timestamp"
         return: "boolean"
+        rewrite: "cast({0} as timestamp) != {1}"
       - args:
         - "date"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} != cast({1} as date)"
       - args:
         - "timestamp"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} != cast({1} as timestamp)"
       - args:
         - "time"
         - "varchar"
         return: "boolean"
+        rewrite: "{0} != cast({1} as time)"
     - names:
       - "like"
       signatures:

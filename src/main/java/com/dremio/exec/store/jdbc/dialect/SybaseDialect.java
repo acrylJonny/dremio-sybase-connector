@@ -13,6 +13,7 @@ import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlWriter;
 import org.apache.calcite.sql.parser.SqlParserPos;
+import org.apache.calcite.sql.SqlAbstractDateTimeLiteral;
 import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
 import com.dremio.common.expression.CompleteType;
 
@@ -56,6 +57,12 @@ public class SybaseDialect extends ArpDialect {
     }
 
     return super.supportsLiteral(type);
+  }
+
+  @Override
+  public void unparseDateTimeLiteral(SqlWriter writer,
+    SqlAbstractDateTimeLiteral literal, int leftPrec, int rightPrec) {
+    writer.literal("'" + literal.toFormattedString() + "'");
   }
 
   @Override
