@@ -27,7 +27,8 @@
  import com.dremio.exec.catalog.conf.NotMetadataImpacting;
  import com.dremio.exec.catalog.conf.Secret;
  import com.dremio.exec.catalog.conf.SourceType;
- import com.dremio.exec.server.SabotContext;
+ import com.dremio.options.OptionManager;
+ import com.dremio.security.CredentialsService;
  import com.dremio.exec.store.jdbc.CloseableDataSource;
  import com.dremio.exec.store.jdbc.DataSources;
  import com.dremio.exec.store.jdbc.JdbcStoragePlugin;
@@ -92,7 +93,7 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
 
   @Override
   @VisibleForTesting
-  protected Config toPluginConfig(SabotContext context) {
+  protected Config toPluginConfig(CredentialsService credentialsService, OptionManager optionManager) {
          return JdbcStoragePlugin.Config.newBuilder()
         .withDialect(getDialect())
         .withDatasourceFactory(this::newDataSource)
@@ -102,7 +103,7 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
   }
 
 
-    private CloseableDataSource newDataSource() {
+  private CloseableDataSource newDataSource() {
     final Properties properties = new Properties();
 
     properties.setProperty("JCONNECT_VERSION", "7");
@@ -118,19 +119,19 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
     password,
     properties,
     DataSources.CommitMode.DRIVER_SPECIFIED_COMMIT_MODE);
-}
-
-private String toJdbcConnectionString() {
-  final String hostname = checkNotNull(this.hostname, "missing hostname");
-  final String portAsString = checkNotNull(this.port, "missing port");
-  final int port = Integer.parseInt(portAsString);
-
-  if (!Strings.isNullOrEmpty(this.database)) {
-    return String.format("jdbc:sybase:Tds:%s:%s/%s", hostname, port, this.database);
-  } else {
-    return String.format("jdbc:sybase:Tds:%s:%s", hostname, port);
   }
-}
+
+  private String toJdbcConnectionString() {
+    final String hostname = checkNotNull(this.hostname, "missing hostname");
+    final String portAsString = checkNotNull(this.port, "missing port");
+    final int port = Integer.parseInt(portAsString);
+
+    if (!Strings.isNullOrEmpty(this.database)) {
+      return String.format("jdbc:sybase:Tds:%s:%s/%s", hostname, port, this.database);
+    } else {
+      return String.format("jdbc:sybase:Tds:%s:%s", hostname, port);
+    }
+  }
 
   @Override
   public ArpDialect getDialect() {
