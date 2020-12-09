@@ -87,6 +87,11 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
   @NotMetadataImpacting
   public int fetchSize = 500;
 
+  @Tag(8)
+  @NotMetadataImpacting
+  @DisplayMetadata(label = "Grant External Query access (External Query allows creation of VDS from a Sybase query. Learn more here: https://docs.dremio.com/data-sources/external-queries.html#enabling-external-queries)")
+  public boolean enableExternalQuery = false;
+
 
   public SybaseConf() {
   }
@@ -99,6 +104,7 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
         .withDatasourceFactory(this::newDataSource)
         .withShowOnlyConnDatabase(false)
         .withFetchSize(fetchSize)
+        .withAllowExternalQuery(enableExternalQuery)
         .build();
   }
 
