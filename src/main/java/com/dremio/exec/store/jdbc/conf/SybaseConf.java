@@ -31,8 +31,7 @@
  import com.dremio.security.CredentialsService;
  import com.dremio.exec.store.jdbc.CloseableDataSource;
  import com.dremio.exec.store.jdbc.DataSources;
- import com.dremio.exec.store.jdbc.JdbcStoragePlugin;
- import com.dremio.exec.store.jdbc.JdbcStoragePlugin.Config;
+ import com.dremio.exec.store.jdbc.JdbcPluginConfig;
  import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
  import com.dremio.exec.store.jdbc.dialect.SybaseDialect;
  import com.google.common.annotations.VisibleForTesting;
@@ -98,9 +97,8 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
 
   @Override
   @VisibleForTesting
-  protected Config toPluginConfig(CredentialsService credentialsService, OptionManager optionManager) {
-         return JdbcStoragePlugin.Config.newBuilder()
-        .withDialect(getDialect())
+  public JdbcPluginConfig buildPluginConfig(JdbcPluginConfig.Builder configBuilder, CredentialsService credentialsService, OptionManager optionManager) {
+         return configBuilder.withDialect(getDialect())
         .withDatasourceFactory(this::newDataSource)
         .withShowOnlyConnDatabase(false)
         .withFetchSize(fetchSize)
