@@ -1,4 +1,5 @@
 # Dremio Sybase ARP Connector
+[![Build Status](https://travis-ci.org/dremioJonny/dremio-sybase-connector.svg?branch=master)](https://travis-ci.org/dremioJonny/dremio-sybase-connector)
 
 The Sybase connector allows Dremio to connect to and query data in Sybase ASE.
 
