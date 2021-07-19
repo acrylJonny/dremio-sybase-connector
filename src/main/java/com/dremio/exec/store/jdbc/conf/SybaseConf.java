@@ -32,6 +32,7 @@
  import com.dremio.exec.store.jdbc.CloseableDataSource;
  import com.dremio.exec.store.jdbc.DataSources;
  import com.dremio.exec.store.jdbc.JdbcPluginConfig;
+ import com.fasterxml.jackson.annotation.JsonIgnore;
  import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
  import com.dremio.exec.store.jdbc.dialect.SybaseDialect;
  import com.google.common.annotations.VisibleForTesting;
@@ -43,7 +44,7 @@
 /**
  * Configuration for Sybase sources.
  */
-@SourceType(value = "SYBASEARP", label = "Sybase", uiConfig = "sybasearp-layout.json")
+@SourceType(value = "SYBASEARP", label = "Sybase", uiConfig = "sybasearp-layout.json", externalQuerySupported = true)
 public class SybaseConf extends AbstractArpConf<SybaseConf> {
   private static final String ARP_FILENAME = "arp/implementation/sybase-arp.yaml";
   private static final ArpDialect ARP_DIALECT =
@@ -88,8 +89,19 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
 
   @Tag(8)
   @NotMetadataImpacting
+  @JsonIgnore
   @DisplayMetadata(label = "Grant External Query access (External Query allows creation of VDS from a Sybase query. Learn more here: https://docs.dremio.com/data-sources/external-queries.html#enabling-external-queries)")
   public boolean enableExternalQuery = false;
+
+  @Tag(9)
+  @DisplayMetadata(label = "Maximum idle connections")
+  @NotMetadataImpacting
+  public int maxIdleConns = 8;
+
+  @Tag(10)
+  @DisplayMetadata(label = "Connection idle time (s)")
+  @NotMetadataImpacting
+  public int idleTimeSec = 60;
 
 
   public SybaseConf() {
@@ -122,7 +134,9 @@ public class SybaseConf extends AbstractArpConf<SybaseConf> {
     username,
     password,
     properties,
-    DataSources.CommitMode.DRIVER_SPECIFIED_COMMIT_MODE);
+    DataSources.CommitMode.DRIVER_SPECIFIED_COMMIT_MODE,
+    maxIdleConns,
+    idleTimeSec);
   }
 
   private String toJdbcConnectionString() {
