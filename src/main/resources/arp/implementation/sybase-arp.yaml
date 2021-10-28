@@ -148,6 +148,14 @@ data_types:
       name: "BIGTIME"
     dremio:
       name: "time"
+  - source:
+      name: ""
+    dremio:
+      name: "timestamp"
+  - source:
+      name: "None"
+    dremio:
+      name: "timestamp"
 
 relational_algebra:
   aggregation:
