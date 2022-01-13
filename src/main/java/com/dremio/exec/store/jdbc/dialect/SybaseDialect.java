@@ -51,6 +51,11 @@ public class SybaseDialect extends ArpDialect {
   }
 
   @Override
+  public boolean supportsNestedAggregations() {
+    return false;
+  }
+
+  @Override
   public boolean supportsLiteral(CompleteType type) {
     if (CompleteType.BIT.equals(type)) {
       return false;
@@ -99,6 +104,7 @@ public class SybaseDialect extends ArpDialect {
           select.getHaving(),
           select.getWindowList(),
           select.getOrderList(),
+          null,
           null,
           null,
           SqlParserPos.ZERO);

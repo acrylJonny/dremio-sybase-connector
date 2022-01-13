@@ -21,12 +21,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.dremio.plugin</groupId>
-  <version>17.0.0</version>
+  <version>19.1.0</version>
   <artifactId>dremio-sybasearp-plugin</artifactId>
   <name>Dremio Sybase ARP Community Connector</name>
 
   <properties>
-    <version.dremio>17.0.0-202107060524010627-31b5222b</version.dremio>
+    <version.dremio>19.1.0-202111160130570172-0ee00450</version.dremio>
   </properties>
 
   <dependencies>
