@@ -68,7 +68,7 @@ data_types:
   - source:
       name: "NUMERIC"
     dremio:
-      name: "integer"
+      name: "bigint"
   - source:
       name: "MONEY"
     dremio:
