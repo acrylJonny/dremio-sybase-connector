@@ -44,7 +44,7 @@
 /**
  * Configuration for Sybase sources.
  */
-@SourceType(value = "SYBASEARP", label = "Sybase", uiConfig = "sybasearp-layout.json", externalQuerySupported = true)
+@SourceType(value = "SYBASEARP", label = "Sybase", uiConfig = "sybasearp-layout.json", externalQuerySupported = true, previewEngineRequired = true)
 public class SybaseConf extends AbstractArpConf<SybaseConf> {
   private static final String ARP_FILENAME = "arp/implementation/sybase-arp.yaml";
   private static final ArpDialect ARP_DIALECT =

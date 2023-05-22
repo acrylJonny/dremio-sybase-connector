@@ -16,17 +16,19 @@
     limitations under the License.
 
 -->
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+  http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.dremio.plugin</groupId>
-  <version>19.1.0</version>
+  <version>24.0.0</version>
   <artifactId>dremio-sybasearp-plugin</artifactId>
   <name>Dremio Sybase ARP Community Connector</name>
 
   <properties>
-    <version.dremio>19.1.0-202111160130570172-0ee00450</version.dremio>
+    <version.dremio>24.0.0-202302100528110223-3a169b7c</version.dremio>
   </properties>
 
   <dependencies>

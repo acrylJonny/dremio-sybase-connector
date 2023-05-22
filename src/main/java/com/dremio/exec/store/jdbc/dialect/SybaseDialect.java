@@ -12,6 +12,7 @@ import org.apache.calcite.sql.SqlSelectKeyword;
 import org.apache.calcite.sql.SqlLiteral;
 import org.apache.calcite.sql.SqlNodeList;
 import org.apache.calcite.sql.SqlWriter;
+import org.apache.calcite.sql.SqlOperator;
 import org.apache.calcite.sql.parser.SqlParserPos;
 import org.apache.calcite.sql.SqlAbstractDateTimeLiteral;
 import com.dremio.exec.store.jdbc.dialect.arp.ArpDialect;
@@ -71,22 +72,23 @@ public class SybaseDialect extends ArpDialect {
   }
 
   @Override
-  public void unparseCall(final SqlWriter writer, final SqlCall call, final int leftPrec, final int rightPrec) {
-    // Transform SqlSelect nodes that have a fetch node to be SqlSelect nodes with a TOP and no fetch.
-    if (call instanceof SqlSelect) {
-      final SqlSelect select = (SqlSelect) call;
+  public void unparseCall(SqlWriter writer, SqlCall call, int leftPrec, int rightPrec) {
+    final SqlOperator op = call.getOperator();
 
+    if (call instanceof SqlSelect) {
       // Transform SqlSelect nodes that have a fetch node without offset to be
       // SqlSelect nodes with a TOP and no fetch.
-      if (null != select.getFetch()
-        && (null == select.getOffset() || 0 == ((SqlLiteral) select.getOffset()).getValueAs(Long.class))) {
+      final SqlSelect select = (SqlSelect) call;
+
+      if (select.getFetch() != null
+        && (select.getOffset() == null || ((SqlLiteral) select.getOffset()).getValueAs(Long.class) == 0)) {
         final SqlNodeList keywords = new SqlNodeList(SqlParserPos.ZERO);
 
         // Add the DISTINCT or ALL keywords if the original Select had either. (Only can have one of these).
         // These must go before TOP.
-        if (null != select.getModifierNode(SqlSelectKeyword.DISTINCT)) {
+        if (select.getModifierNode(SqlSelectKeyword.DISTINCT) != null) {
           keywords.add(select.getModifierNode(SqlSelectKeyword.DISTINCT));
-        } else if (null != select.getModifierNode(SqlSelectKeyword.ALL)) {
+        } else if (select.getModifierNode(SqlSelectKeyword.ALL) != null) {
           keywords.add(select.getModifierNode(SqlSelectKeyword.ALL));
         }
 
@@ -103,6 +105,7 @@ public class SybaseDialect extends ArpDialect {
           select.getGroup(),
           select.getHaving(),
           select.getWindowList(),
+          select.getQualify(),
           select.getOrderList(),
           null,
           null,
